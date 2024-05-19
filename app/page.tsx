@@ -6,7 +6,7 @@ import {
   PushpinTwoTone,
   SendOutlined,
 } from "@ant-design/icons";
-import { useState } from "react";
+import { useState, useRef } from "react";
 export default function Home() {
   const [messageApi, contextHolder] = message.useMessage();
   const [isGenerated, setIsGenerated] = useState<boolean>(false);
@@ -70,6 +70,17 @@ export default function Home() {
   const handleCancel = () => {
     console.log("Clicked cancel button");
     setOpen(false);
+  };
+  const qrCodeRef = useRef();
+
+  const handleSaveQRCode = async () => {
+    if (qrCodeRef.current) {
+      const canvas = await html2canvas(qrCodeRef.current);
+      const link = document.createElement('a');
+      link.href = canvas.toDataURL('image/png');
+      link.download = `qrcode_${slug}.png`;
+      link.click();
+    }
   };
   return (
     <main className="flex min-h-screen flex-col items-center  p-24 bg-gradient-to-r from-red-400 via-red-400 to-red-500">
@@ -148,7 +159,9 @@ export default function Home() {
         <>
           <div className="p-20 lg:px-36 lg: rounded-lg bg-white shadow-xl flex flex-col justify-between gap-3">
             <div className=" w-48 lg:w-80 flex flex-col gap-2 justify-center lg:items-center">
-              <QRCode value={"s.phawit.tech/" + slug} />
+              <div ref={qrCodeRef}>
+                <QRCode value={"s.phawit.tech/" + slug} />
+              </div>
               <span className=" font-bold">URL</span>
               <span>{"s.phawit.tech/" + slug}</span>
               <Button
@@ -163,6 +176,15 @@ export default function Home() {
                 className="w-full"
               >
                 Copy URL
+              </Button>
+              <Button
+                type="default"
+                shape="round"
+                size="large"
+                onClick={handleSaveQRCode}
+                className="w-full"
+              >
+                Save QR Code
               </Button>
               <Button
                 type="default"
