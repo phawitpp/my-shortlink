@@ -29,16 +29,27 @@ export default function Home() {
     if (slug == "") {
       setSlug(Math.random().toString(36).substring(2, 7));
     }
-    const data = await fetch(apiUrl + "/api/link/newlink", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        url: url,
-        short_link: slug,
-      }),
-    });
+    try {
+      const data = await fetch(apiUrl + "/api/link/newlink", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          url: url,
+          short_link: slug,
+        }),
+      });
+    } catch (error) {
+      messageApi.open({
+        type: "error",
+        content: error,
+      });
+      setConfirmLoading(false);
+      setOpen(false);
+      return;
+    }
+    
     const response = await data.json();
     if (response.status == "error") {
       messageApi.open({
