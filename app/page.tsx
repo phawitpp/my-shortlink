@@ -73,7 +73,8 @@ export default function Home() {
     console.log("Clicked cancel button");
     setOpen(false);
   };
-  const qrCodeRef = useRef();
+  const qrCodeRef = useRef<HTMLDivElement | null>(null);
+
 
   const handleSaveQRCode = async () => {
     if (qrCodeRef.current) {
