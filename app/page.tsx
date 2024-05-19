@@ -43,7 +43,7 @@ export default function Home() {
     } catch (error) {
       messageApi.open({
         type: "error",
-        content: error,
+        content: error.message,
       });
       setConfirmLoading(false);
       setOpen(false);
