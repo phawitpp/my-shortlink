@@ -40,28 +40,31 @@ export default function Home() {
           short_link: slug,
         }),
       });
+
+      const response = await data.json();
+      if (response.status == "error") {
+        messageApi.open({
+          type: "error",
+          content: response.message,
+        });
+        setConfirmLoading(false);
+        setOpen(false);
+        return;
+      }
+      setIsGenerated(true);
+      setConfirmLoading(false);
     } catch (error) {
+      console.error('Fetch error:', error); // Log the error to the console for debugging
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
       messageApi.open({
         type: "error",
-        content: error.message,
+        content: errorMessage,
       });
       setConfirmLoading(false);
       setOpen(false);
       return;
     }
-    
-    const response = await data.json();
-    if (response.status == "error") {
-      messageApi.open({
-        type: "error",
-        content: response.message,
-      });
-      setConfirmLoading(false);
-      setOpen(false);
-      return;
-    }
-    setIsGenerated(true);
-    setConfirmLoading(false);
+
   };
 
   const handleCancel = () => {
