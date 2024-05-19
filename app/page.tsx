@@ -7,6 +7,8 @@ import {
   SendOutlined,
 } from "@ant-design/icons";
 import { useState, useRef } from "react";
+import html2canvas from 'html2canvas';
+
 export default function Home() {
   const [messageApi, contextHolder] = message.useMessage();
   const [isGenerated, setIsGenerated] = useState<boolean>(false);
